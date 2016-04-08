@@ -10,10 +10,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.PanningImageView;
+
+import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.HeaderIconView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -21,12 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.image)
-    PanningImageView panningImageView;
+    //@Bind(R.id.image)
+    //PanningImageView panningImageView;
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
     ViewPager viewPager;
+    @Bind(R.id.headerBubble)
+    HeaderIconView headerIconView;
+
+    private boolean isShowingIcon1 = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +45,32 @@ public class MainActivity extends AppCompatActivity {
         final MockFragmentAdapter adapter = new MockFragmentAdapter(this.getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (isShowingIcon1){
+                    headerIconView.nextTab(R.drawable.ic_icon_2, ContextCompat.getColor(MainActivity.this, android.R.color.white));
+                    isShowingIcon1 = false;
+                }else{
+                    headerIconView.nextTab(R.drawable.ic_icon_1, ContextCompat.getColor(MainActivity.this, android.R.color.white));
+                    isShowingIcon1 = true;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         //panningImageView.setupWithFragmentPagerAdapter(adapter);
 
-        panningImageView.setImageDrawable(getImageFiltered(getApplicationContext(), R.drawable.example, R.color.colorPrimary));
-
+        //panningImageView.setImageDrawable(getImageFiltered(getApplicationContext(), R.drawable.example, R.color.colorPrimary));
     }
 
     public Drawable getImageFiltered(Context context, int res, int color) {
@@ -58,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
         ColorMatrix colorizeMatrix = new ColorMatrix();
         color = context.getResources().getColor(color);
         colorizeMatrix.setScale(Color.red(color) / 255.0f,
-            Color.green(color) / 255.0f,
-            Color.blue(color) / 255.0f,
-            Color.alpha(color) / 255.0f); // <- try setting this to 1.0f for no translucency
+                Color.green(color) / 255.0f,
+                Color.blue(color) / 255.0f,
+                Color.alpha(color) / 255.0f); // <- try setting this to 1.0f for no translucency
 
         // concatenate the two matrices and create a ColorMatrixColorFilter from the result:
         greyscaleMatrix.postConcat(colorizeMatrix);

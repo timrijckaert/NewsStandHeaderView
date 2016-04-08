@@ -18,12 +18,8 @@ package be.vrt.mobile.android.sporza.voetbal.ui.widget.slf;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -83,7 +79,6 @@ public class PanningImageView extends ImageView {
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        //final Drawable newDrawable = getImageFiltered(drawable);
         super.setImageDrawable(drawable);
         handleImageChange();
     }
@@ -114,29 +109,6 @@ public class PanningImageView extends ImageView {
             postInvalidateDelayed(FRAME_DELAY);
         }
         super.onDraw(canvas);
-    }
-
-    public static Drawable getImageFiltered(final Drawable oldDrawable) {
-        BitmapDrawable drawable = (BitmapDrawable) oldDrawable;
-
-        // create matrix to convert to greyscale:
-        ColorMatrix greyscaleMatrix = new ColorMatrix();
-        greyscaleMatrix.setSaturation(0);
-
-        // create matrix to colorize and apply transluceny:
-        ColorMatrix colorizeMatrix = new ColorMatrix();
-        colorizeMatrix.setScale(Color.red(0) / 255.0f,
-                Color.green(37) / 255.0f,
-                Color.blue(32) / 255.0f,
-                Color.alpha(188) / 255.0f); // <- try setting this to 1.0f for no translucency
-
-        // concatenate the two matrices and create a ColorMatrixColorFilter from the result:
-        greyscaleMatrix.postConcat(colorizeMatrix);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(greyscaleMatrix);
-
-        // apply the filter:
-        drawable.setColorFilter(filter);
-        return drawable;
     }
 
     private void doKenBernsEffect() {

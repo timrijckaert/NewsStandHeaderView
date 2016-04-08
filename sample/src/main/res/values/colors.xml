@@ -4,7 +4,7 @@
     <color name="white_70percent_opaque">#b4ffffff</color>
 
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorAccent_transparent">#b5002520</color>
+    <color name="colorAccent_transparent">#003e36</color>
 </resources>

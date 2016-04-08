@@ -5,6 +5,13 @@ apply plugin: 'signing'
 android {
     buildToolsVersion "23.0.2"
     compileSdkVersion 23
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
 }
 
 android.libraryVariants.all { variant ->
@@ -50,46 +57,7 @@ signing {
     sign configurations.archives
 }
 
-//uploadArchives {
-//  repositories {
-//    mavenDeployer {
-//      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//
-//      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-//        authentication(userName: ossrhUsername, password: ossrhPassword)
-//      }
-//
-//      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//        authentication(userName: ossrhUsername, password: ossrhPassword)
-//      }
-//
-//      pom.project {
-//        name 'KenBurnsView'
-//		artifactId 'kenburnsview'
-//        packaging 'jar', 'aar'
-//        description 'Android library that provides an extension to ImageView that creates an immersive experience by animating its drawable using the Ken Burns Effect.'
-//        url 'https://github.com/flavioarfaria/KenBurnsView'
-//
-//        scm {
-//          connection 'scm:git@github.com:flavioarfaria/KenBurnsView.git'
-//          developerConnection 'scm:git@github.com:flavioarfaria/KenBurnsView.git'
-//          url 'scm:git@github.com:flavioarfaria/KenBurnsView.git'
-//        }
-//
-//        licenses {
-//          license {
-//            name 'The Apache License, Version 2.0'
-//            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//          }
-//        }
-//
-//        developers {
-//          developer {
-//            id 'flavioarfaria'
-//            name 'Flavio Faria'
-//          }
-//        }
-//      }
-//    }
-//  }
-//}
+dependencies {
+    compile 'com.android.support:support-annotations:23.2.1'
+}
+

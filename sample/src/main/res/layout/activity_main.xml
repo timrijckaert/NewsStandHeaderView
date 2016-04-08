@@ -15,18 +15,16 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             app:titleEnabled="false"
-            android:layout_height="225dp"
+            android:layout_height="245dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.PanningImageView
-                android:id="@+id/image"
+            <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.HeaderIconView
+                android:id="@+id/headerBubble"
+                android:src="@drawable/ic_icon_1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                app:layout_collapseMode="parallax" />
-            <!--android:src="@drawable/example"-->
+                android:layout_height="match_parent" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -49,9 +47,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-<!--
-        app:behavior_overlapTop="64dp"
--->
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"

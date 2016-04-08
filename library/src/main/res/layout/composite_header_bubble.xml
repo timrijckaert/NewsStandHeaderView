@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.HeaderIconView
+        android:id="@+id/headerBubble"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.PanningImageView
+        android:id="@+id/panningImage"
+        android:background="@drawable/example"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</merge>
