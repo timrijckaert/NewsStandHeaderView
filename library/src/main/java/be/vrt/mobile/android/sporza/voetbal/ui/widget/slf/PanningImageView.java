@@ -22,7 +22,6 @@ import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -85,7 +84,7 @@ public class PanningImageView extends ImageView {
     @Override
     public void setImageDrawable(Drawable drawable) {
         final Drawable newDrawable = getImageFiltered(drawable);
-        super.setImageDrawable(drawable);
+        super.setImageDrawable(newDrawable);
         handleImageChange();
     }
 
@@ -115,7 +114,6 @@ public class PanningImageView extends ImageView {
             postInvalidateDelayed(FRAME_DELAY);
         }
         super.onDraw(canvas);
-        canvas.drawColor(Color.parseColor("#b5002520"), PorterDuff.Mode.SRC_ATOP);
     }
 
     public static Drawable getImageFiltered(final Drawable oldDrawable) {
