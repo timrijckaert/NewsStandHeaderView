@@ -1,0 +1,26 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="toolbar_style" parent="">
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="popupTheme">@style/toolbar_popup_style</item>
+    </style>
+
+    <style name="toolbar_popup_style" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Now.TabLayout" parent="android:Widget">
+        <!-- Tab Layout for Now -->
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextColor">@color/white_70percent_opaque</item>
+        <item name="tabIndicatorColor">@color/white</item>
+    </style>
+</resources>
