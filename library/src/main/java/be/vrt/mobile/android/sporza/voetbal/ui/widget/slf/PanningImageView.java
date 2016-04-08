@@ -83,8 +83,8 @@ public class PanningImageView extends ImageView {
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        final Drawable newDrawable = getImageFiltered(drawable);
-        super.setImageDrawable(newDrawable);
+        //final Drawable newDrawable = getImageFiltered(drawable);
+        super.setImageDrawable(drawable);
         handleImageChange();
     }
 
