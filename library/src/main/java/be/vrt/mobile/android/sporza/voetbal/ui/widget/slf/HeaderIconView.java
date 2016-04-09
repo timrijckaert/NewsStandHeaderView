@@ -1,8 +1,9 @@
 package be.vrt.mobile.android.sporza.voetbal.ui.widget.slf;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
@@ -20,8 +21,12 @@ import com.flaviofaria.kenburnsview.R;
 public class HeaderIconView extends LinearLayout {
 
     private final ImageView bubble;
+    private final View circularReveal;
+
     private final GradientDrawable bubbleBackground;
-    private final static int SHRINK_ANIMATION_DURATION = 300;
+    private final static int SHRINK_ANIMATION_DURATION = 350;
+    private final static int CIRCULAR_SCALE_ANIMATION_DURATION = 550;
+    private static final int CIRCULAR_FADE_OUT_ANIMATION_DURATION = 600;
 
     //<editor-fold desc="Constructors">
     public HeaderIconView(final Context context) {
@@ -43,6 +48,7 @@ public class HeaderIconView extends LinearLayout {
         final View view = layoutInflater.inflate(R.layout.composite_header_image, this, true);
 
         bubble = (ImageView) view.findViewById(R.id.bubble);
+        circularReveal = view.findViewById(R.id.circular_reveal);
         bubbleBackground = (GradientDrawable) bubble.getBackground().mutate();
     }
 
@@ -65,29 +71,14 @@ public class HeaderIconView extends LinearLayout {
                 .scaleX(0f)
                 .scaleY(0f)
                 .setDuration(SHRINK_ANIMATION_DURATION)
-                .setListener(new Animator.AnimatorListener() {
+                .setListener(new AnimatorListenerAdapter() {
                     @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(final Animator animation) {
                         setBubbleIcon(iconResId);
                         setBubbleBackground(color);
                         growBubble();
 
-                        //revealAnimation(color)
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
+                        revealAnimation(color);
                     }
                 })
                 .start();
@@ -98,6 +89,58 @@ public class HeaderIconView extends LinearLayout {
                 .scaleX(1f)
                 .scaleY(1f)
                 .setDuration(SHRINK_ANIMATION_DURATION)
+                .setListener(null)
                 .start();
+    }
+
+    private void revealAnimation(final int color) {
+        final GradientDrawable circularBackground = (GradientDrawable) circularReveal.getBackground().mutate();
+        circularBackground.setColor(lighten(color, .1));
+        circularReveal.setAlpha(0.5f);
+        circularReveal.setVisibility(VISIBLE);
+
+        circularReveal.animate()
+                .scaleX(10f)
+                .scaleY(10f)
+                .alpha(1f)
+                .setDuration(CIRCULAR_SCALE_ANIMATION_DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fadeOutCircleReveal();
+                    }
+                })
+                .start();
+    }
+
+    private void fadeOutCircleReveal() {
+        circularReveal.animate()
+                .alpha(1f)
+                .alpha(0f)
+                .setDuration(CIRCULAR_FADE_OUT_ANIMATION_DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        circularReveal.setScaleX(0);
+                        circularReveal.setScaleY(0);
+                        circularReveal.setVisibility(GONE);
+                    }
+                })
+                .start();
+    }
+
+    private int lighten(final int color, final double fraction) {
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        red = lightenColor(red, fraction);
+        green = lightenColor(green, fraction);
+        blue = lightenColor(blue, fraction);
+        int alpha = Color.alpha(color);
+        return Color.argb(alpha, red, green, blue);
+    }
+
+    private int lightenColor(final int color, final double fraction) {
+        return (int) Math.min(color + (color * fraction), 255);
     }
 }

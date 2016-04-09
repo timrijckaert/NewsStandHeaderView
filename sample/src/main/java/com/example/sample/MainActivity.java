@@ -11,11 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.HeaderIconView;
+import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.PanningImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -23,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    //@Bind(R.id.image)
-    //PanningImageView panningImageView;
+    @Bind(R.id.panningImageView)
+    PanningImageView panningImageView;
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
@@ -45,14 +47,17 @@ public class MainActivity extends AppCompatActivity {
         final MockFragmentAdapter adapter = new MockFragmentAdapter(this.getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        headerIconView.setBubbleIcon(R.drawable.ic_icon_1);
+        headerIconView.setBubbleBackground(ResourcesCompat.getColor(this.getResources(), R.color.colorAccent, null));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (isShowingIcon1){
-                    headerIconView.nextTab(R.drawable.ic_icon_2, ContextCompat.getColor(MainActivity.this, android.R.color.white));
+                    headerIconView.nextTab(R.drawable.ic_icon_2, ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     isShowingIcon1 = false;
                 }else{
-                    headerIconView.nextTab(R.drawable.ic_icon_1, ContextCompat.getColor(MainActivity.this, android.R.color.white));
+                    headerIconView.nextTab(R.drawable.ic_icon_1, ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
                     isShowingIcon1 = true;
                 }
             }
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         //panningImageView.setupWithFragmentPagerAdapter(adapter);
 
-        //panningImageView.setImageDrawable(getImageFiltered(getApplicationContext(), R.drawable.example, R.color.colorPrimary));
+        panningImageView.setImageDrawable(getImageFiltered(getApplicationContext(), R.drawable.example, R.color.colorPrimary));
     }
 
     public Drawable getImageFiltered(Context context, int res, int color) {

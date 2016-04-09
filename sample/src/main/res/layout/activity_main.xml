@@ -20,6 +20,12 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+            <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.PanningImageView
+                android:id="@+id/panningImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/example"/>
+
             <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.HeaderIconView
                 android:id="@+id/headerBubble"
                 android:src="@drawable/ic_icon_1"
