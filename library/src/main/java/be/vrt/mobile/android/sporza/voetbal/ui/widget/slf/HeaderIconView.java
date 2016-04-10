@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,8 +55,8 @@ public class HeaderIconView extends LinearLayout {
         bubbleBackground = (GradientDrawable) bubble.getBackground().mutate();
     }
 
-    public void setBubbleIcon(@DrawableRes final int iconResId) {
-        bubble.setImageResource(iconResId);
+    public void setBubbleIcon(@NonNull final Drawable drawable){
+        bubble.setImageDrawable(drawable);
         bubbleBackground.invalidateSelf();
     }
 
@@ -63,11 +65,11 @@ public class HeaderIconView extends LinearLayout {
         bubbleBackground.invalidateSelf();
     }
 
-    public void nextTab(@DrawableRes final int iconResId, @ColorInt final int color) {
-        shrinkBubble(iconResId, color);
+    public void nextTab(@DrawableRes final Drawable drawable, @ColorInt final int color) {
+        shrinkBubble(drawable, color);
     }
 
-    private void shrinkBubble(final int iconResId, final int color) {
+    private void shrinkBubble(final Drawable icon, final int color) {
         bubble.animate()
                 .scaleX(0f)
                 .scaleY(0f)
@@ -75,7 +77,7 @@ public class HeaderIconView extends LinearLayout {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(final Animator animation) {
-                        setBubbleIcon(iconResId);
+                        setBubbleIcon(icon);
                         setBubbleBackground(color);
                         growBubble();
 

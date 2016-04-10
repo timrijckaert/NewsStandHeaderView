@@ -10,14 +10,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.HeaderIconView;
-import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.PanningImageView;
+import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.NewsStandHeaderView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -25,16 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.panningImageView)
-    PanningImageView panningImageView;
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
     ViewPager viewPager;
-    @Bind(R.id.headerBubble)
-    HeaderIconView headerIconView;
-
-    private boolean isShowingIcon1 = true;
+    @Bind(R.id.newsstandheaderview)
+    NewsStandHeaderView newsStandHeaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,38 +37,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        final MockFragmentAdapter adapter = new MockFragmentAdapter(this.getSupportFragmentManager());
+        final MockFragmentAdapter adapter = new MockFragmentAdapter(this.getBaseContext(), this.getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        headerIconView.setBubbleIcon(R.drawable.ic_icon_1);
-        headerIconView.setBubbleBackground(ResourcesCompat.getColor(this.getResources(), R.color.colorAccent, null));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (isShowingIcon1){
-                    headerIconView.nextTab(R.drawable.ic_icon_2, ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    isShowingIcon1 = false;
-                }else{
-                    headerIconView.nextTab(R.drawable.ic_icon_1, ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
-                    isShowingIcon1 = true;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        //panningImageView.setupWithFragmentPagerAdapter(adapter);
-
-        panningImageView.setImageDrawable(getImageFiltered(getApplicationContext(), R.drawable.example, R.color.colorPrimary));
+        newsStandHeaderView.setupWithViewPager(viewPager);
+//        panningImageView.setImageDrawable(getImageFiltered(getApplicationContext(), R.drawable.example, R.color.colorPrimary));
     }
 
     public Drawable getImageFiltered(Context context, int res, int color) {
