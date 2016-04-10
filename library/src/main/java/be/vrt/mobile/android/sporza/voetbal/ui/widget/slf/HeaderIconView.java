@@ -30,6 +30,7 @@ public class HeaderIconView extends LinearLayout {
     private final View circularReveal;
 
     private final GradientDrawable bubbleBackground;
+    private TransitionListener listener;
 
     //<editor-fold desc="Chaining Constructors">
     public HeaderIconView(final Context context) {
@@ -55,7 +56,7 @@ public class HeaderIconView extends LinearLayout {
         bubbleBackground = (GradientDrawable) bubble.getBackground().mutate();
     }
 
-    public void setBubbleIcon(@NonNull final Drawable drawable){
+    public void setBubbleIcon(@NonNull final Drawable drawable) {
         bubble.setImageDrawable(drawable);
         bubbleBackground.invalidateSelf();
     }
@@ -63,6 +64,10 @@ public class HeaderIconView extends LinearLayout {
     public void setBubbleBackground(@ColorInt final int color) {
         bubbleBackground.setColor(color);
         bubbleBackground.invalidateSelf();
+    }
+
+    public void setTransitionListener(TransitionListener listener) {
+        this.listener = listener;
     }
 
     public void nextTab(@DrawableRes final Drawable drawable, @ColorInt final int color) {
@@ -92,8 +97,19 @@ public class HeaderIconView extends LinearLayout {
                 .scaleX(1f)
                 .scaleY(1f)
                 .setDuration(SHRINK_ANIMATION_DURATION)
-                .setListener(null)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fireTransitionEnd();
+                    }
+                })
                 .start();
+    }
+
+    private void fireTransitionEnd() {
+        if (listener != null) {
+            listener.onBubbleGrowingComplete();
+        }
     }
 
     private void revealAnimation(final int color) {
@@ -145,5 +161,9 @@ public class HeaderIconView extends LinearLayout {
 
     private int lightenColor(final int color, final double fraction) {
         return (int) Math.min(color + (color * fraction), 255);
+    }
+
+    interface TransitionListener {
+        void onBubbleGrowingComplete();
     }
 }
