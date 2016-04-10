@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 
+import java.util.List;
+
+import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.ImageProvidable;
 import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.NewsStandHeaderView;
 
 /**
@@ -24,8 +27,7 @@ public class MockFragmentAdapter extends FragmentPagerAdapter implements NewsSta
 
     @Override
     public Fragment getItem(final int position) {
-        MockFragment mockFragment = MockFragment.newInstance();
-        return mockFragment;
+        return MockFragment.newInstance();
     }
 
     @Override
@@ -82,5 +84,20 @@ public class MockFragmentAdapter extends FragmentPagerAdapter implements NewsSta
                 break;
         }
         return icon;
+    }
+
+    @Override
+    public List<String> getBackgroundImages(final int position) {
+        List<String> backgroundImages = null;
+        final Fragment fragment = getItem(position);
+        if (fragment != null) {
+            if (fragment instanceof ImageProvidable) {
+                ImageProvidable imageProvidable = (ImageProvidable) fragment;
+                backgroundImages = imageProvidable.getBackgroundImages(position);
+            } else {
+                throw new RuntimeException("Fragment must implement ImageProvidable");
+            }
+        }
+        return backgroundImages;
     }
 }
