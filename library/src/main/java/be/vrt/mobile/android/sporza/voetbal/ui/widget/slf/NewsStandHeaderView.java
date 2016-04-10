@@ -171,10 +171,15 @@ public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPage
             if (imageURLs.size() == currentImageIndex + 1) {
                 currentImageIndex = -1;
             }
-            currentImageIndex++;
-            picasso.load(imageURLs.get(currentImageIndex)).into(backgroundTransformer);
-            transitionsCount = 0;
+
+            loadBackgroundImage();
         }
+    }
+
+    private void loadBackgroundImage() {
+        currentImageIndex++;
+        picasso.load(imageURLs.get(currentImageIndex)).into(backgroundTransformer);
+        transitionsCount = 0;
     }
 
     public Drawable getImageFiltered(Bitmap bitmap, int color) {
@@ -201,8 +206,7 @@ public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPage
 
     @Override
     public void onBubbleGrowingComplete() {
-        panningImage.clearAnimation();
-        onTransitionEnd(null);
+        loadBackgroundImage();
     }
 
     public interface NewsStandHeaderViewConfiguratorAdapter extends ImageProvidable {
