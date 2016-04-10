@@ -20,15 +20,16 @@ import com.flaviofaria.kenburnsview.R;
  */
 public class HeaderIconView extends LinearLayout {
 
-    private final ImageView bubble;
-    private final View circularReveal;
-
-    private final GradientDrawable bubbleBackground;
     private final static int SHRINK_ANIMATION_DURATION = 350;
     private final static int CIRCULAR_SCALE_ANIMATION_DURATION = 550;
     private static final int CIRCULAR_FADE_OUT_ANIMATION_DURATION = 600;
 
-    //<editor-fold desc="Constructors">
+    private final ImageView bubble;
+    private final View circularReveal;
+
+    private final GradientDrawable bubbleBackground;
+
+    //<editor-fold desc="Chaining Constructors">
     public HeaderIconView(final Context context) {
         this(context, null);
     }
@@ -102,7 +103,7 @@ public class HeaderIconView extends LinearLayout {
         circularReveal.animate()
                 .scaleX(10f)
                 .scaleY(10f)
-                .alpha(1f)
+                .alpha(0.9f)
                 .setDuration(CIRCULAR_SCALE_ANIMATION_DURATION)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
