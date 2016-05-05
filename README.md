@@ -63,6 +63,9 @@ newsStandHeaderView.setImages(0, asList(
         ));
 ```
 
+# Production Usages
+* [Sporza Voetbal][SPV] (from VRT)
+
 # Dependencies
 * [Picasso][picasso] (from Square)
 * [KenBurnsView][kenburnsview] (from flavioarfaria)
@@ -72,3 +75,4 @@ newsStandHeaderView.setImages(0, asList(
 
 [picasso]: https://github.com/square/picasso
 [kenburnsview]: https://github.com/flavioarfaria/KenBurnsView
+[SPV]: https://play.google.com/store/apps/details?id=be.vrt.mobile.android.sporza.voetbal&hl=nl
