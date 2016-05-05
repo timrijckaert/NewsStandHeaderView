@@ -3,8 +3,9 @@
     <color name="white">#FFFFFF</color>
     <color name="white_70percent_opaque">#b4ffffff</color>
 
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#148A8A</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorGreen">#00796b</color>
+    <color name="colorAccent">#7ED321</color>
+    <color name="colorPrimary2">#004898</color>
+    <color name="colorPrimary3">#7ED321</color>
 </resources>

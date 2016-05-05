@@ -27,30 +27,32 @@ import android.widget.ImageView;
 
 public class PanningImageView extends ImageView {
 
-    private static final long FRAME_DELAY = 1000 / 60;
+    public static final int MILLISECONDS_PER_SECOND = 1000;
+    public static final int DESIRED_FPS = 60;
+    private static final long FRAME_DELAY = MILLISECONDS_PER_SECOND / DESIRED_FPS;
     private final Matrix matrix = new Matrix();
+    private final RectF viewPortRect = new RectF();
     private TransitionGenerator transitionGenerator = new RandomTransitionGenerator();
     private TransitionListener transitionListener;
     private Transition currentTransition;
-    private final RectF viewPortRect = new RectF();
     private RectF drawableRect;
     private long elapsedTime;
     private long lastFrameTime;
     private boolean initialized;
 
-    public PanningImageView(Context context) {
+    public PanningImageView(final Context context) {
         this(context, null);
     }
 
-    public PanningImageView(Context context, AttributeSet attrs) {
+    public PanningImageView(final Context context, final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PanningImageView(Context context, AttributeSet attrs, int defStyle) {
+    public PanningImageView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
         initialized = true;
 
-        super.setScaleType(ImageView.ScaleType.MATRIX);
+        super.setScaleType(ScaleType.MATRIX);
     }
 
     //<editor-fold desc="Overrides From ImageView">
@@ -60,31 +62,31 @@ public class PanningImageView extends ImageView {
     }
 
     @Override
-    public void setImageBitmap(Bitmap bm) {
+    public void setImageBitmap(final Bitmap bm) {
         super.setImageBitmap(bm);
         handleImageChange();
     }
 
     @Override
-    public void setImageResource(int resId) {
+    public void setImageResource(final int resId) {
         super.setImageResource(resId);
         handleImageChange();
     }
 
     @Override
-    public void setImageURI(Uri uri) {
+    public void setImageURI(final Uri uri) {
         super.setImageURI(uri);
         handleImageChange();
     }
 
     @Override
-    public void setImageDrawable(Drawable drawable) {
+    public void setImageDrawable(final Drawable drawable) {
         super.setImageDrawable(drawable);
         handleImageChange();
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         restart();
     }
@@ -185,7 +187,7 @@ public class PanningImageView extends ImageView {
         startNewTransition();
     }
 
-    public void setTransitionListener(TransitionListener transitionListener) {
+    public void setTransitionListener(final TransitionListener transitionListener) {
         this.transitionListener = transitionListener;
     }
     //</editor-fold>
@@ -215,13 +217,13 @@ public class PanningImageView extends ImageView {
     //</editor-fold>
 
     //<editor-fold desc="Transition Listener">
-    private void fireTransitionStart(Transition transition) {
+    private void fireTransitionStart(final Transition transition) {
         if (transitionListener != null && transition != null) {
             transitionListener.onTransitionStart(transition);
         }
     }
 
-    private void fireTransitionEnd(Transition transition) {
+    private void fireTransitionEnd(final Transition transition) {
         if (transitionListener != null && transition != null) {
             transitionListener.onTransitionEnd(transition);
         }

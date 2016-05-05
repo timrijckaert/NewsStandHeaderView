@@ -50,14 +50,14 @@ public class RandomTransitionGenerator implements TransitionGenerator {
     }
 
 
-    public RandomTransitionGenerator(long transitionDuration, Interpolator transitionInterpolator) {
+    public RandomTransitionGenerator(final long transitionDuration, final Interpolator transitionInterpolator) {
         setTransitionDuration(transitionDuration);
         setTransitionInterpolator(transitionInterpolator);
     }
 
 
     @Override
-    public Transition generateNextTransition(RectF drawableBounds, RectF viewport) {
+    public Transition generateNextTransition(final RectF drawableBounds, final RectF viewport) {
         boolean firstTransition = mLastGenTrans == null;
         boolean drawableBoundsChanged = true;
         boolean viewportRatioChanged = true;
@@ -101,7 +101,7 @@ public class RandomTransitionGenerator implements TransitionGenerator {
      * @return an arbitrary generated rect with the same aspect ratio of {@code viewportRect}
      * that will be contained within {@code drawableBounds}.
      */
-    private RectF generateRandomRect(RectF drawableBounds, RectF viewportRect) {
+    private RectF generateRandomRect(final RectF drawableBounds, final RectF viewportRect) {
         float drawableRatio = MathUtils.getRectRatio(drawableBounds);
         float viewportRectRatio = MathUtils.getRectRatio(viewportRect);
         RectF maxCrop;
@@ -133,7 +133,7 @@ public class RandomTransitionGenerator implements TransitionGenerator {
      * Sets the duration, in milliseconds, for each transition generated.
      * @param transitionDuration the transition duration.
      */
-    public void setTransitionDuration(long transitionDuration) {
+    public void setTransitionDuration(final long transitionDuration) {
         mTransitionDuration = transitionDuration;
     }
 
@@ -142,7 +142,7 @@ public class RandomTransitionGenerator implements TransitionGenerator {
      * Sets the {@link Interpolator} for each transition generated.
      * @param interpolator the transition interpolator.
      */
-    public void setTransitionInterpolator(Interpolator interpolator) {
+    public void setTransitionInterpolator(final Interpolator interpolator) {
         mTransitionInterpolator = interpolator;
     }
 }

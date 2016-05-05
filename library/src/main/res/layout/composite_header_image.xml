@@ -3,21 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View android:id="@+id/circular_reveal"
-        android:layout_marginTop="-20dp"
-        android:visibility="gone"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
+    <be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.SquaredView
+        android:id="@+id/circular_reveal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/bubble_shape" />
+        android:layout_marginTop="-20dp"
+        android:background="@drawable/bubble_shape"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/bubble"
-        android:layout_marginTop="-20dp"
         android:layout_width="72dp"
         android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-20dp"
         android:background="@drawable/bubble_shape"
         android:padding="8dp"
-        android:scaleType="fitCenter"
-        android:layout_gravity="center" />
+        android:scaleType="fitCenter" />
 </FrameLayout>

@@ -7,9 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 
-import java.util.List;
-
-import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.ImageProvidable;
 import be.vrt.mobile.android.sporza.voetbal.ui.widget.slf.NewsStandHeaderView;
 
 /**
@@ -53,24 +50,24 @@ public class MockFragmentAdapter extends FragmentPagerAdapter implements NewsSta
     }
 
     @Override
-    public int getColor(int position) {
+    public int getColor(final int position) {
         int color = 0;
         switch (position) {
             case 0:
-                color = ContextCompat.getColor(context, R.color.colorAccent);
-                break;
-            case 1:
                 color = ContextCompat.getColor(context, R.color.colorPrimary);
                 break;
+            case 1:
+                color = ContextCompat.getColor(context, R.color.colorPrimary2);
+                break;
             case 2:
-                color = ContextCompat.getColor(context, R.color.colorGreen);
+                color = ContextCompat.getColor(context, R.color.colorPrimary3);
                 break;
         }
         return color;
     }
 
     @Override
-    public Drawable getIcon(int position) {
+    public Drawable getIcon(final int position) {
         Drawable icon = null;
         switch (position) {
             case 0:
@@ -87,17 +84,19 @@ public class MockFragmentAdapter extends FragmentPagerAdapter implements NewsSta
     }
 
     @Override
-    public List<String> getBackgroundImages(final int position) {
-        List<String> backgroundImages = null;
-        final Fragment fragment = getItem(position);
-        if (fragment != null) {
-            if (fragment instanceof ImageProvidable) {
-                ImageProvidable imageProvidable = (ImageProvidable) fragment;
-                backgroundImages = imageProvidable.getBackgroundImages(position);
-            } else {
-                throw new RuntimeException("Fragment must implement ImageProvidable");
-            }
+    public int getFallbackDrawableResId(final int position) {
+        int fallbackResId = R.drawable.headerfallback;
+        switch (position) {
+            case 0:
+                fallbackResId = R.drawable.headerfallback;
+                break;
+            case 1:
+                fallbackResId = R.drawable.headerfallback_news;
+                break;
+            case 2:
+                fallbackResId = R.drawable.headerfallback_video;
+                break;
         }
-        return backgroundImages;
+        return fallbackResId;
     }
 }

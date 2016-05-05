@@ -20,15 +20,14 @@ import android.view.animation.Interpolator;
 
 public class Transition {
 
+    /**
+     * An intermediary rect that changes in every frame according to the transition progress.
+     */
+    private final RectF mCurrentRect = new RectF();
     /** The rect the transition will start from. */
     private RectF mSrcRect;
-
     /** The rect the transition will end at. */
     private RectF mDstRect;
-
-    /** An intermediary rect that changes in every frame according to the transition progress. */
-    private final RectF mCurrentRect = new RectF();
-
     /** Precomputed width difference between {@link #mSrcRect} and {@link #mSrcRect}. */
     private float mWidthDiff;
     /** Precomputed height difference between {@link #mSrcRect} and {@link #mSrcRect}. */
@@ -47,7 +46,7 @@ public class Transition {
     private Interpolator mInterpolator;
 
 
-    public Transition(RectF srcRect, RectF dstRect, long duration, Interpolator interpolator) {
+    public Transition(final RectF srcRect, final RectF dstRect, final long duration, final Interpolator interpolator) {
         if (!MathUtils.haveSameAspectRatio(srcRect, dstRect)) {
             throw new IncompatibleRatioException();
         }
@@ -87,7 +86,7 @@ public class Transition {
      * in the current frame.
      * @param elapsedTime the elapsed time since this transition started.
      */
-    public RectF getInterpolatedRect(long elapsedTime) {
+    public RectF getInterpolatedRect(final long elapsedTime) {
         float elapsedTimeFraction = elapsedTime / (float) mDuration;
         float interpolationProgress = Math.min(elapsedTimeFraction, 1);
         float interpolation = mInterpolator.getInterpolation(interpolationProgress);

@@ -1,62 +1,43 @@
 package be.vrt.mobile.android.sporza.voetbal.ui.widget.slf;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.flaviofaria.kenburnsview.R;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by trijckaert on 09/04/16.
  */
-public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPageChangeListener, PanningImageView.TransitionListener, HeaderIconView.TransitionListener {
+public class NewsStandHeaderView
+        extends RelativeLayout
+        implements PanningImageView.TransitionListener, HeaderIconView.TransitionListener, ViewPager.OnPageChangeListener {
 
+    private static final int TRANSITIONS_BEFORE_SWITCHING_THRESHOLD = 3;
     private final PanningImageView panningImage;
     private final HeaderIconView headerBubble;
-
-    private final HashMap<Integer, Drawable> iconsReferenceMap = new HashMap<>();
-    private final HashMap<Integer, Integer> colorsReferenceMap = new HashMap<>();
-    private final Picasso picasso;
-
-    private static final int TRANSITIONS_TO_SWITCH = 3;
+    private final SparseArray<Drawable> iconsReference = new SparseArray<>();
+    private final SparseArray<Integer> colorsReference = new SparseArray<>();
+    private final SparseArray<List<String>> headerViewImageReference = new SparseArray<>();
     private int transitionsCount = 0;
 
-    private List<String> imageURLs;
     private NewsStandHeaderViewConfiguratorAdapter adapter;
 
     private int currentImageIndex = 0;
     private int currentPageIndex;
-    private Target backgroundTransformer = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            panningImage.setImageDrawable(getImageFiltered(bitmap, getColorByPosition(currentPageIndex)));
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-        }
-    };
+    private Picasso picasso;
 
     //<editor-fold desc="Chaining Constructors">
     public NewsStandHeaderView(final Context context) {
@@ -66,16 +47,10 @@ public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPage
     public NewsStandHeaderView(final Context context, final AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
-    public NewsStandHeaderView(final Context context, final AttributeSet attrs, final int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
     //</editor-fold>
 
-    public NewsStandHeaderView(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        picasso = Picasso.with(getContext());
-        picasso.setIndicatorsEnabled(true);
+    public NewsStandHeaderView(final Context context, final AttributeSet attrs, final int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         final LayoutInflater layoutInflater = LayoutInflater.from(context);
         final View view = layoutInflater.inflate(R.layout.composite_newsstand_header, this, true);
 
@@ -86,15 +61,39 @@ public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPage
         headerBubble.setTransitionListener(this);
     }
 
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        if (!this.isInEditMode()) {
+            picasso = Picasso.with(getContext());
+        }
+    }
+
+    @Override
+    public void onTransitionStart(final Transition transition) {
+    }
+
+    @Override
+    public void onTransitionEnd(final Transition transition) {
+        transitionsCount++;
+        if (transitionsCount == TRANSITIONS_BEFORE_SWITCHING_THRESHOLD) {
+            loadBackgroundImage();
+        }
+    }
+
+    @Override
+    public void onBubbleGrowingComplete() {
+        loadBackgroundImage();
+    }
+
     public void setupWithViewPager(final ViewPager viewPager) {
         if (viewPager != null) {
-            viewPager.addOnPageChangeListener(this);
-
             if (viewPager.getAdapter() != null) {
-                final PagerAdapter adapter = viewPager.getAdapter();
-                if (adapter instanceof NewsStandHeaderViewConfiguratorAdapter) {
-                    this.adapter = (NewsStandHeaderViewConfiguratorAdapter) adapter;
+                final PagerAdapter viewPagerAdapter = viewPager.getAdapter();
+                if (viewPagerAdapter instanceof NewsStandHeaderViewConfiguratorAdapter) {
+                    this.adapter = (NewsStandHeaderViewConfiguratorAdapter) viewPagerAdapter;
                     initializeViews();
+                    viewPager.addOnPageChangeListener(this);
                 } else {
                     throw new RuntimeException("Adapter must implement NewsStandHeaderViewConfiguratorAdapter");
                 }
@@ -102,25 +101,38 @@ public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPage
         }
     }
 
+    public void setImages(final int position, final List<String> contentUrlDTOs) {
+        final long seed = System.nanoTime();
+        Collections.shuffle(contentUrlDTOs, new Random(seed));
+        headerViewImageReference.put(position, contentUrlDTOs);
+    }
+
     private void initializeViews() {
         final int color = adapter.getColor(0);
         final Drawable icon = adapter.getIcon(0);
-        imageURLs = adapter.getBackgroundImages(0);
 
-        colorsReferenceMap.put(0, color);
-        iconsReferenceMap.put(0, icon);
+        colorsReference.put(0, color);
+        iconsReference.put(0, icon);
 
         headerBubble.setBubbleBackground(color);
         headerBubble.setBubbleIcon(icon);
 
-        if (imageURLs.size() > 0) {
-            picasso.load(imageURLs.get(0)).into(backgroundTransformer);
-            currentImageIndex = 0;
-        }
+        headerBubble.nextTab(icon, color);
+
+        loadFallBackBackground();
+
+        currentImageIndex = 0;
+    }
+
+    private void loadFallBackBackground() {
+        final Transformation tintTransformation = new ColorTintingGrayScaleTransformation(getColorByPosition(currentPageIndex));
+        picasso.load(adapter.getFallbackDrawableResId(currentPageIndex))
+                .transform(tintTransformation)
+                .into(panningImage);
     }
 
     @Override
-    public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
 
     @Override
@@ -134,84 +146,61 @@ public class NewsStandHeaderView extends FrameLayout implements ViewPager.OnPage
         headerBubble.nextTab(icon, color);
     }
 
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
     private int getColorByPosition(final int position) {
         int color;
-        if (colorsReferenceMap.containsValue(position)) {
-            color = colorsReferenceMap.get(position);
+        final Integer colorInt = colorsReference.get(position, -1);
+        if (colorInt != -1) {
+            color = colorsReference.get(position);
         } else {
             color = adapter.getColor(position);
-            colorsReferenceMap.put(position, color);
+            colorsReference.put(position, color);
         }
         return color;
     }
 
     private Drawable getDrawableByPosition(final int position) {
         Drawable drawable;
-        if (iconsReferenceMap.containsValue(position)) {
-            drawable = iconsReferenceMap.get(position);
+        final Drawable icon = iconsReference.get(position, null);
+        if (icon != null) {
+            drawable = iconsReference.get(position);
         } else {
             drawable = adapter.getIcon(position);
-            iconsReferenceMap.put(position, drawable);
+            iconsReference.put(position, drawable);
         }
         return drawable;
-    }
-
-    @Override
-    public void onPageScrollStateChanged(final int state) {
-    }
-
-    @Override
-    public void onTransitionStart(final Transition transition) {
-    }
-
-    @Override
-    public void onTransitionEnd(final Transition transition) {
-        transitionsCount++;
-        if (transitionsCount == TRANSITIONS_TO_SWITCH) {
-            if (imageURLs.size() == currentImageIndex + 1) {
-                currentImageIndex = -1;
-            }
-
-            loadBackgroundImage();
-        }
     }
 
     private void loadBackgroundImage() {
+        if (headerViewImageReference.size() == 0
+                || headerViewImageReference.get(currentPageIndex) == null
+                || headerViewImageReference.get(currentPageIndex).size() == 0) {
+            loadFallBackBackground();
+            return;
+        }
+
+        if (headerViewImageReference.get(currentPageIndex).size() <= currentImageIndex + 1) {
+            currentImageIndex = -1;
+        }
+
         currentImageIndex++;
-        picasso.load(imageURLs.get(currentImageIndex)).into(backgroundTransformer);
+        final Transformation tintTransformation = new ColorTintingGrayScaleTransformation(getColorByPosition(currentPageIndex));
+        picasso.load(headerViewImageReference.get(currentPageIndex).get(currentImageIndex))
+                .transform(tintTransformation)
+                .into(panningImage);
+
         transitionsCount = 0;
     }
 
-    public Drawable getImageFiltered(Bitmap bitmap, int color) {
-        BitmapDrawable drawable = new BitmapDrawable(this.getResources(), bitmap);
+    public interface NewsStandHeaderViewConfiguratorAdapter {
+        int getColor(int position);
 
-        ColorMatrix greyscaleMatrix = new ColorMatrix();
-        greyscaleMatrix.setSaturation(0);
+        Drawable getIcon(int position);
 
-        // create matrix to colorize and apply translucency:
-        ColorMatrix colorizeMatrix = new ColorMatrix();
-        colorizeMatrix.setScale(Color.red(color) / 255.0f,
-                Color.green(color) / 255.0f,
-                Color.blue(color) / 255.0f,
-                Color.alpha(color) / 255.0f); // <- try setting this to 1.0f for no translucency
-
-        // concatenate the two matrices and create a ColorMatrixColorFilter from the result:
-        greyscaleMatrix.postConcat(colorizeMatrix);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(greyscaleMatrix);
-
-        // apply the filter:
-        drawable.setColorFilter(filter);
-        return drawable;
-    }
-
-    @Override
-    public void onBubbleGrowingComplete() {
-        loadBackgroundImage();
-    }
-
-    public interface NewsStandHeaderViewConfiguratorAdapter extends ImageProvidable {
-        int getColor(final int position);
-
-        Drawable getIcon(final int position);
+        int getFallbackDrawableResId(int position);
     }
 }
