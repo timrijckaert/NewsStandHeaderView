@@ -68,7 +68,7 @@ newsStandHeaderView.setImages(0, asList(
 * [KenBurnsView][kenburnsview] (from flavioarfaria)
 
 # Contributors
-* Special thanks to [Filip Maelbrancke (filipmaelbrancke)]https://github.com/filipmaelbrancke)
+* Special thanks to [Filip Maelbrancke (filipmaelbrancke)](https://github.com/filipmaelbrancke)
 
 [picasso]: https://github.com/square/picasso
 [kenburnsview]: https://github.com/flavioarfaria/KenBurnsView
