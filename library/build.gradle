@@ -12,25 +12,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
-}
 
-android.libraryVariants.all { variant ->
-    def name = variant.buildType.name
-    if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
-        return; // Skip debug builds.
-    }
-    task("javadoc${variant.name.capitalize()}", type: Javadoc) {
-        description "Generates Javadoc for $variant.name."
-        source = variant.javaCompile.source
-        ext.androidJar = System.getenv("ANDROID_HOME") + "/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+    lintOptions {
+        abortOnError false
     }
 
-    task("bundleJavadoc${variant.name.capitalize()}", type: Jar) {
-        description "Bundles Javadoc into zip for $variant.name."
-        classifier = "javadoc"
-        from tasks["javadoc${variant.name.capitalize()}"]
-    }
 }
 
 task sourcesJar(type: Jar) {
@@ -42,19 +28,9 @@ task jar(type: Jar) {
     from 'build/intermediates/classes/release'
 }
 
-task javadocJar(type: Jar, dependsOn: "javadocRelease") {
-    classifier = 'javadoc'
-    from 'build/docs/javadoc'
-}
-
 artifacts {
     archives sourcesJar
-    archives javadocJar
     archives jar
-}
-
-signing {
-    sign configurations.archives
 }
 
 dependencies {
