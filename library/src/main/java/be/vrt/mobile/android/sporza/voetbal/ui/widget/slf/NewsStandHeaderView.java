@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.flaviofaria.kenburnsview.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 

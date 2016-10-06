@@ -16,9 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.flaviofaria.kenburnsview.R;
-
 /**
  * Created by trijckaert on 08/04/16.
  */

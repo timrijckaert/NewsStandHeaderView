@@ -15,6 +15,6 @@
   ~ limitations under the License.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.flaviofaria.kenburnsview">
+          package="be.vrt.mobile.android.sporza.voetbal.ui.widget.slf">
 
 </manifest>
