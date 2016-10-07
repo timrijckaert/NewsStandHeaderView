@@ -5,7 +5,28 @@ Provided a fully working sample.
 
 ![GIF showing fancy animation the NewsStandHeaderView provides](http://i.imgur.com/ybujP3g.gif)
 
-# Setup :
+##Installation
+
+Add it in your root build.gradle at the end of repositories:
+
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+
+Add the dependency
+
+```gradle
+dependencies {
+        compile 'com.github.timrijckaert:NewsStandHeaderView:v1.4'
+}
+```
+
+##Usage :
 
 Add the ```NewsStandHeaderView``` in your ```CollapsingToolbarLayout``` or ```AppBarLayout```.
 
